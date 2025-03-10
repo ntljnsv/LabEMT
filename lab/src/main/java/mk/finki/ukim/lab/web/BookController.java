@@ -68,4 +68,9 @@ public class BookController {
     }
 
 
+    @GetMapping("/search")
+    public List<BookResponseDTO> findByNameOrAuthor(@RequestParam String query) {
+        return bookService.findByNameOrAuthor(query);
+    }
+
 }

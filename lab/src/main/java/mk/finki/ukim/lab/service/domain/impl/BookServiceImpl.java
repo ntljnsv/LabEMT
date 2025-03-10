@@ -84,6 +84,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<Book> findByNameOrAuthor(String query) {
+        return bookRepository.findByNameContainingOrAuthor_NameOrAuthor_Surname(query, query, query);
+    }
+
+
+    @Override
     public Optional<Book> borrowBook(Long id) {
 
         Book book = findById(id).get();

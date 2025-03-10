@@ -14,4 +14,6 @@ public interface BookService {
 
     Optional<Book> borrowBook(Long id);
     Optional<Book> returnBook(Long id);
+
+    List<Book> findByNameOrAuthor(String query);
 }

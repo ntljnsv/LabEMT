@@ -15,4 +15,6 @@ public interface BookApplicationService {
 
     Optional<BookResponseDTO> borrowBook(Long id);
     Optional<BookResponseDTO> returnBook(Long id);
+
+    List<BookResponseDTO> findByNameOrAuthor(String query);
 }

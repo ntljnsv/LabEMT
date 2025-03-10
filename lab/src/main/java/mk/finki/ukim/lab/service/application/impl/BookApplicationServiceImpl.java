@@ -64,4 +64,10 @@ public class BookApplicationServiceImpl implements BookApplicationService {
         return bookService.returnBook(id).map(BookResponseDTO::fromEntity);
     }
 
+    @Override
+    public List<BookResponseDTO> findByNameOrAuthor(String query) {
+        return bookService.findByNameOrAuthor(query)
+                .stream().map(BookResponseDTO::fromEntity).toList();
+    }
+
 }
