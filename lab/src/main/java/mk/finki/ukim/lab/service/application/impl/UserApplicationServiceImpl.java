@@ -1,7 +1,6 @@
 package mk.finki.ukim.lab.service.application.impl;
 
 import mk.finki.ukim.lab.dto.*;
-import mk.finki.ukim.lab.model.domain.User;
 import mk.finki.ukim.lab.service.application.UserApplicationService;
 import mk.finki.ukim.lab.service.domain.UserService;
 import org.springframework.stereotype.Service;

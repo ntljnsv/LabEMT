@@ -1,7 +1,6 @@
 package mk.finki.ukim.lab.service.domain;
 
 import mk.finki.ukim.lab.model.domain.Book;
-import mk.finki.ukim.lab.model.domain.BookInventory;
 
 import java.util.List;
 import java.util.Optional;
