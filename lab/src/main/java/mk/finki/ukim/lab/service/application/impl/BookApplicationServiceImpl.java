@@ -1,5 +1,6 @@
 package mk.finki.ukim.lab.service.application.impl;
 
+import mk.finki.ukim.lab.dto.BookInventoryResponseDTO;
 import mk.finki.ukim.lab.dto.BookRequestDTO;
 import mk.finki.ukim.lab.dto.BookResponseDTO;
 import mk.finki.ukim.lab.service.application.BookApplicationService;
@@ -50,18 +51,17 @@ public class BookApplicationServiceImpl implements BookApplicationService {
 
     @Override
     public boolean deleteById(Long id) {
-
         return bookService.deleteById(id);
     }
 
     @Override
-    public Optional<BookResponseDTO> borrowBook(Long id) {
-        return bookService.borrowBook(id).map(BookResponseDTO::fromEntity);
+    public Optional<BookInventoryResponseDTO> borrowBook(Long id) {
+        return bookService.borrowBook(id).map(BookInventoryResponseDTO::fromEntity);
     }
 
     @Override
-    public Optional<BookResponseDTO> returnBook(Long id) {
-        return bookService.returnBook(id).map(BookResponseDTO::fromEntity);
+    public Optional<BookInventoryResponseDTO> returnBook(Long id) {
+        return bookService.returnBook(id).map(BookInventoryResponseDTO::fromEntity);
     }
 
     @Override

@@ -2,6 +2,7 @@ package mk.finki.ukim.lab.web;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import mk.finki.ukim.lab.dto.BookInventoryResponseDTO;
 import mk.finki.ukim.lab.dto.BookRequestDTO;
 import mk.finki.ukim.lab.dto.BookResponseDTO;
 import mk.finki.ukim.lab.service.application.BookApplicationService;
@@ -66,7 +67,7 @@ public class BookController {
 
     @Operation(summary = "Borrow book", description = "Borrows a book by it's ID.")
     @PostMapping("/borrow-book/{id}")
-    public ResponseEntity<BookResponseDTO> borrowBook(@PathVariable Long id) {
+    public ResponseEntity<BookInventoryResponseDTO> borrowBook(@PathVariable Long id) {
         return bookService.borrowBook(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
@@ -74,7 +75,7 @@ public class BookController {
 
     @Operation(summary = "Return book", description = "Returns a book by it's ID.")
     @PostMapping("/return-book/{id}")
-    public ResponseEntity<BookResponseDTO> returnBook(@PathVariable Long id) {
+    public ResponseEntity<BookInventoryResponseDTO> returnBook(@PathVariable Long id) {
         return bookService.returnBook(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());

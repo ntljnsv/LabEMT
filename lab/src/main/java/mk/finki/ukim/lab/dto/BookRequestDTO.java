@@ -4,9 +4,9 @@ import mk.finki.ukim.lab.model.domain.Author;
 import mk.finki.ukim.lab.model.domain.Book;
 import mk.finki.ukim.lab.model.enums.Category;
 
-public record BookRequestDTO (String name, String category, Long authorId, Integer availableCopies) {
+public record BookRequestDTO (String name, String category, Long authorId, int availableCopies) {
 
     public Book toEntity(Category category, Author author) {
-        return new Book(name, category, author, availableCopies);
+        return new Book(name, category, author);
     }
 }

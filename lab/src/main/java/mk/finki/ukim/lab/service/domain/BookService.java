@@ -1,6 +1,7 @@
 package mk.finki.ukim.lab.service.domain;
 
 import mk.finki.ukim.lab.model.domain.Book;
+import mk.finki.ukim.lab.model.domain.BookInventory;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,8 +13,8 @@ public interface BookService {
     Optional<Book> update(Long id, String name, String category, Long authorId, Integer availableCopies);
     boolean deleteById(Long id);
 
-    Optional<Book> borrowBook(Long id);
-    Optional<Book> returnBook(Long id);
+    Optional<BookInventory> borrowBook(Long id);
+    Optional<BookInventory> returnBook(Long id);
 
     List<Book> findByNameOrAuthor(String query);
 }

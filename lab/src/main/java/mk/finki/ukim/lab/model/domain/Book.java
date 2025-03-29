@@ -17,12 +17,13 @@ public class Book {
     private Category category;
     @ManyToOne
     private Author author;
-    private Integer availableCopies;
 
-    public Book(String name, Category category, Author author, Integer availableCopies) {
+    @OneToOne(mappedBy = "book", cascade = CascadeType.ALL)
+    private BookInventory inventory;
+
+    public Book(String name, Category category, Author author) {
         this.name = name;
         this.category = category;
         this.author = author;
-        this.availableCopies = availableCopies;
     }
 }

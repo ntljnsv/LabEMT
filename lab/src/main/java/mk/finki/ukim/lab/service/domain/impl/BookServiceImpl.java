@@ -1,12 +1,13 @@
 package mk.finki.ukim.lab.service.domain.impl;
 
 import mk.finki.ukim.lab.model.domain.Book;
+import mk.finki.ukim.lab.model.domain.BookInventory;
 import mk.finki.ukim.lab.model.enums.Category;
 import mk.finki.ukim.lab.model.exceptions.AuthorNotFoundException;
 import mk.finki.ukim.lab.model.exceptions.BookNotFoundException;
-import mk.finki.ukim.lab.model.exceptions.NoAvailableCopiesException;
 import mk.finki.ukim.lab.repository.BookRepository;
 import mk.finki.ukim.lab.service.domain.AuthorService;
+import mk.finki.ukim.lab.service.domain.BookInventoryService;
 import mk.finki.ukim.lab.service.domain.BookService;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,12 @@ public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final AuthorService authorService;
+    private final BookInventoryService bookInventoryService;
 
-    public BookServiceImpl(BookRepository bookRepository, AuthorService authorService) {
+    public BookServiceImpl(BookRepository bookRepository, AuthorService authorService, BookInventoryService bookInventoryService) {
         this.bookRepository = bookRepository;
         this.authorService = authorService;
+        this.bookInventoryService = bookInventoryService;
     }
 
     @Override
@@ -42,15 +45,15 @@ public class BookServiceImpl implements BookService {
         if(name.isEmpty() || categoryName.isEmpty() || authorId == null) {
             throw new IllegalArgumentException();
         }
-        return Optional.of(
-            bookRepository.save(
-                new Book(
-                    name, Category.valueOf(categoryName),
-                    authorService.findById(authorId).orElseThrow(() -> new AuthorNotFoundException(authorId)),
-                    availableCopies
-                )
-            )
+
+        Book book = new Book(
+            name, Category.valueOf(categoryName),
+            authorService.findById(authorId).orElseThrow(() -> new AuthorNotFoundException(authorId))
         );
+
+        bookInventoryService.create(book, availableCopies);
+
+        return Optional.of(bookRepository.save(book));
     }
 
     @Override
@@ -67,7 +70,7 @@ public class BookServiceImpl implements BookService {
             book.setAuthor(authorService.findById(authorId).orElseThrow(() -> new AuthorNotFoundException(authorId)));
         }
         if(availableCopies != null) {
-            book.setAvailableCopies(availableCopies);
+            bookInventoryService.updateByBookId(id, availableCopies);
         }
         return Optional.of(bookRepository.save(book));
     }
@@ -77,6 +80,7 @@ public class BookServiceImpl implements BookService {
 
         Optional<Book> book = findById(id);
         if(book.isPresent()) {
+            bookInventoryService.deleteByBookId(id);
             bookRepository.deleteById(id);
             return true;
         }
@@ -90,22 +94,13 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public Optional<Book> borrowBook(Long id) {
-
-        Book book = findById(id).get();
-        if(book.getAvailableCopies() <= 0) {
-            throw new NoAvailableCopiesException(id);
-        }
-        book.setAvailableCopies(book.getAvailableCopies()-1);
-        return Optional.of(bookRepository.save(book));
+    public Optional<BookInventory> borrowBook(Long id) {
+        return bookInventoryService.borrowBook(id);
     }
 
     @Override
-    public Optional<Book> returnBook(Long id) {
-
-        Book book = findById(id).get();
-        book.setAvailableCopies(book.getAvailableCopies()+1);
-        return Optional.of(bookRepository.save(book));
+    public Optional<BookInventory> returnBook(Long id) {
+        return bookInventoryService.returnBook(id);
     }
 
 }
