@@ -6,6 +6,7 @@ import mk.finki.ukim.lab.model.enums.Role;
 public record UserResponseDTO(String username, String name, String surname, Role role) {
 
     public static UserResponseDTO fromEntity(User user) {
+
         return new UserResponseDTO(
                 user.getUsername(),
                 user.getName(),

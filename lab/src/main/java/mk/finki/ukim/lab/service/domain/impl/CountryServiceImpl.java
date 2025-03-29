@@ -20,19 +20,16 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     public List<Country> listAll() {
-
         return countryRepository.findAll();
     }
 
     @Override
     public Optional<Country> findById(Long id) {
-
         return Optional.of(countryRepository.findById(id).orElseThrow(() -> new CountryNotFoundException(id)));
     }
 
     @Override
     public Optional<Country> create(String name, String continent) {
-
         return Optional.of(
                 countryRepository.save(new Country(name, continent))
         );

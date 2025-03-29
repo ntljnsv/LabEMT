@@ -20,13 +20,11 @@ public class CountryApplicationServiceImpl implements CountryApplicationService 
 
     @Override
     public List<CountryResponseDTO> listAll() {
-
         return countryService.listAll().stream().map(CountryResponseDTO::fromEntity).toList();
     }
 
     @Override
     public Optional<CountryResponseDTO> findById(Long id) {
-
         return countryService.findById(id).map(CountryResponseDTO::fromEntity);
     }
 
@@ -48,7 +46,6 @@ public class CountryApplicationServiceImpl implements CountryApplicationService 
 
     @Override
     public boolean deleteById(Long id) {
-
         return countryService.deleteById(id);
     }
 }

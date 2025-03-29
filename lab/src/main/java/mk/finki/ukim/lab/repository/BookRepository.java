@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
+
     List<Book> findByNameContainingOrAuthor_NameOrAuthor_Surname(String bookName, String authorName, String authorSurname);
 }

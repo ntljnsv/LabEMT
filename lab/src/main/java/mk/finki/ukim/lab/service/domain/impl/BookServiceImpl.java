@@ -29,13 +29,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> listAll() {
-
         return bookRepository.findAll();
     }
 
     @Override
     public Optional<Book> findById(Long id) {
-
         return Optional.of(bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id)));
     }
 

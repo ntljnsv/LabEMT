@@ -5,6 +5,7 @@ import mk.finki.ukim.lab.model.domain.Book;
 public record BookResponseDTO (Long id, String name, String category, Long authorId) {
 
     public static BookResponseDTO fromEntity(Book book) {
+
         return new BookResponseDTO(
                 book.getId(),
                 book.getName(),

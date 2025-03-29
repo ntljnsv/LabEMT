@@ -25,6 +25,7 @@ public class DataInitializer {
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
             BookInventoryRepository bookInventoryRepository) {
+
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.countryRepository = countryRepository;
@@ -35,6 +36,7 @@ public class DataInitializer {
 
     @PostConstruct
     public void init() {
+
         Country country1 = new Country("Country 1", "Continent 1");
         Country country2 = new Country("Country 2", "Continent 2");
         countryRepository.save(country1);

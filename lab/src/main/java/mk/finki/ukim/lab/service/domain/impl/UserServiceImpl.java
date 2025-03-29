@@ -44,6 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> addBookToWishlist(String username, Long bookId) {
+
         User user = findByUsername(username).get();
         if(!bookService.hasAvailableCopies(bookId)) {
             throw new NoAvailableCopiesException(bookId);
@@ -54,6 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> removeBookFromWishlist(String username, Long bookId) {
+
         User user = findByUsername(username).get();
         user.getWishlist().remove(bookService.findById(bookId).get());
         return Optional.of(userRepository.save(user));
@@ -61,6 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> borrowBookFromWishlist(String username, Long bookId) {
+
         User user = findByUsername(username).get();
         user.getWishlist().remove(bookService.findById(bookId).get());
         bookService.borrowBook(bookId);
@@ -69,6 +72,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> borrowAllBooksFromWishlist(String username) {
+
         User user = findByUsername(username).get();
         user.getWishlist().forEach(book -> bookService.borrowBook(book.getId()));
         user.setWishlist(new HashSet<>());
@@ -82,8 +86,8 @@ public class UserServiceImpl implements UserService {
             String repeatPassword,
             String name,
             String surname,
-            Role userRole
-    ) {
+            Role userRole) {
+
         if (username == null || username.isEmpty() || password == null || password.isEmpty())
             throw new InvalidUsernameOrPasswordException();
         if (!password.equals(repeatPassword)) throw new PasswordsDoNotMatchException();
@@ -95,6 +99,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> login(String username, String password) {
+
         if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
             throw new InvalidArgumentsException();
         }

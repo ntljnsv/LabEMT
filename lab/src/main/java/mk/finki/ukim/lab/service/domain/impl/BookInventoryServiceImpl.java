@@ -26,6 +26,7 @@ public class BookInventoryServiceImpl implements BookInventoryService {
 
     @Override
     public Optional<BookInventory> updateByBookId(Long bookId, int availableCopies) {
+
         BookInventory inventory = bookInventoryRepository.findByBookId(bookId)
                 .orElseThrow(() -> new NoAvailableCopiesException(bookId));
         inventory.setAvailableCopies(availableCopies);
@@ -35,6 +36,7 @@ public class BookInventoryServiceImpl implements BookInventoryService {
 
     @Override
     public boolean deleteByBookId(Long bookId) {
+
         Optional<BookInventory> inventory = bookInventoryRepository.findByBookId(bookId);
         if(inventory.isPresent()) {
             bookInventoryRepository.delete(inventory.get());
@@ -45,6 +47,7 @@ public class BookInventoryServiceImpl implements BookInventoryService {
 
     @Override
     public int getNumberOfCopiesByBookId(Long bookId) {
+
         BookInventory inventory = bookInventoryRepository.findByBookId(bookId)
                 .orElseThrow(() -> new BookNotFoundException(bookId));
         return inventory.getAvailableCopies();
@@ -52,6 +55,7 @@ public class BookInventoryServiceImpl implements BookInventoryService {
 
     @Override
     public Optional<BookInventory> borrowBook(Long bookId) {
+
         BookInventory inventory = bookInventoryRepository.findByBookId(bookId)
                 .orElseThrow(() -> new BookNotFoundException(bookId));
         if(inventory.getAvailableCopies() > 0) {
@@ -65,6 +69,7 @@ public class BookInventoryServiceImpl implements BookInventoryService {
 
     @Override
     public Optional<BookInventory> returnBook(Long bookId) {
+
         BookInventory inventory = bookInventoryRepository.findByBookId(bookId)
                 .orElseThrow(() -> new BookNotFoundException(bookId));
         inventory.setAvailableCopies(inventory.getAvailableCopies() + 1);

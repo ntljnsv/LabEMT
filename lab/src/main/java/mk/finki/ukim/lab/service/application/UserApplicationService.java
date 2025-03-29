@@ -19,5 +19,4 @@ public interface UserApplicationService {
     Optional<UserWishlistResponseDTO> borrowBookFromWishlist(UserWishlistRequestDTO userWishlistRequestDTO);
 
     Optional<UserWishlistResponseDTO> borrowAllBooksFromWishlist(String username);
-
 }

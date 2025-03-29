@@ -8,9 +8,14 @@ import java.util.Optional;
 public interface BookInventoryService {
 
     Optional<BookInventory> create(Book book, int availableCopies);
+
     Optional<BookInventory> updateByBookId(Long bookId, int availableCopies);
+
     boolean deleteByBookId(Long bookId);
+
     int getNumberOfCopiesByBookId(Long bookId);
+
     Optional<BookInventory> borrowBook(Long bookId);
+
     Optional<BookInventory> returnBook(Long bookId);
 }

@@ -26,7 +26,6 @@ public class AuthorApplicationServiceImpl implements AuthorApplicationService {
 
     @Override
     public Optional<AuthorResponseDTO> findById(Long id) {
-
         return authorService.findById(id).map(AuthorResponseDTO::fromEntity);
     }
 
@@ -48,7 +47,6 @@ public class AuthorApplicationServiceImpl implements AuthorApplicationService {
 
     @Override
     public boolean deleteById(Long id) {
-
         return authorService.deleteById(id);
     }
 }

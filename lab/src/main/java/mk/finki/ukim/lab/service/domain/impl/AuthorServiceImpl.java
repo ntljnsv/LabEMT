@@ -25,13 +25,11 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Author> listAll() {
-
         return authorRepository.findAll();
     }
 
     @Override
     public Optional<Author> findById(Long id) {
-
         return Optional.of(authorRepository.findById(id).orElseThrow(() -> new AuthorNotFoundException(id)));
     }
 

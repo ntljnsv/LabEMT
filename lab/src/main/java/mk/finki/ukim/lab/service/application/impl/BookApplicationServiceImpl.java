@@ -21,13 +21,11 @@ public class BookApplicationServiceImpl implements BookApplicationService {
 
     @Override
     public List<BookResponseDTO> listAll() {
-
         return bookService.listAll().stream().map(BookResponseDTO::fromEntity).toList();
     }
 
     @Override
     public Optional<BookResponseDTO> findById(Long id) {
-
         return bookService.findById(id).map(BookResponseDTO::fromEntity);
     }
 
@@ -66,6 +64,7 @@ public class BookApplicationServiceImpl implements BookApplicationService {
 
     @Override
     public List<BookResponseDTO> findByNameOrAuthor(String query) {
+
         return bookService.findByNameOrAuthor(query)
                 .stream().map(BookResponseDTO::fromEntity).toList();
     }
