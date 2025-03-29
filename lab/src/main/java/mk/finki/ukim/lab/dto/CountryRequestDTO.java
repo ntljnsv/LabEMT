@@ -1,6 +1,6 @@
-package mk.finki.ukim.lab.model.dto;
+package mk.finki.ukim.lab.dto;
 
-import mk.finki.ukim.lab.model.Country;
+import mk.finki.ukim.lab.model.domain.Country;
 
 public record CountryRequestDTO (String name, String continent) {
 

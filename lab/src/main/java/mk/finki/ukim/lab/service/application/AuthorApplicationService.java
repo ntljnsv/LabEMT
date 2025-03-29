@@ -1,7 +1,7 @@
 package mk.finki.ukim.lab.service.application;
 
-import mk.finki.ukim.lab.model.dto.AuthorRequestDTO;
-import mk.finki.ukim.lab.model.dto.AuthorResponseDTO;
+import mk.finki.ukim.lab.dto.AuthorRequestDTO;
+import mk.finki.ukim.lab.dto.AuthorResponseDTO;
 
 import java.util.List;
 import java.util.Optional;

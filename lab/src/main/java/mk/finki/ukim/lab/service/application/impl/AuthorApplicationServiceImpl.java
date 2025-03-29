@@ -1,7 +1,7 @@
 package mk.finki.ukim.lab.service.application.impl;
 
-import mk.finki.ukim.lab.model.dto.AuthorRequestDTO;
-import mk.finki.ukim.lab.model.dto.AuthorResponseDTO;
+import mk.finki.ukim.lab.dto.AuthorRequestDTO;
+import mk.finki.ukim.lab.dto.AuthorResponseDTO;
 import mk.finki.ukim.lab.service.application.AuthorApplicationService;
 import mk.finki.ukim.lab.service.domain.AuthorService;
 import org.springframework.stereotype.Service;

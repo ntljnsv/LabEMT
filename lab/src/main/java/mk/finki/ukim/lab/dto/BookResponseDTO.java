@@ -1,6 +1,6 @@
-package mk.finki.ukim.lab.model.dto;
+package mk.finki.ukim.lab.dto;
 
-import mk.finki.ukim.lab.model.Book;
+import mk.finki.ukim.lab.model.domain.Book;
 
 public record BookResponseDTO (Long id, String name, String category, Long authorId, Integer availableCopies) {
 

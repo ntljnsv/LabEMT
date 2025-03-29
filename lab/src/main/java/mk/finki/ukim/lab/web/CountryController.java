@@ -1,7 +1,7 @@
 package mk.finki.ukim.lab.web;
 
-import mk.finki.ukim.lab.model.dto.CountryRequestDTO;
-import mk.finki.ukim.lab.model.dto.CountryResponseDTO;
+import mk.finki.ukim.lab.dto.CountryRequestDTO;
+import mk.finki.ukim.lab.dto.CountryResponseDTO;
 import mk.finki.ukim.lab.service.application.CountryApplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

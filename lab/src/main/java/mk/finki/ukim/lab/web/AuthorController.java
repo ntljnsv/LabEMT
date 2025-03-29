@@ -1,7 +1,7 @@
 package mk.finki.ukim.lab.web;
 
-import mk.finki.ukim.lab.model.dto.AuthorRequestDTO;
-import mk.finki.ukim.lab.model.dto.AuthorResponseDTO;
+import mk.finki.ukim.lab.dto.AuthorRequestDTO;
+import mk.finki.ukim.lab.dto.AuthorResponseDTO;
 import mk.finki.ukim.lab.service.application.AuthorApplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

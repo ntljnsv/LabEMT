@@ -1,7 +1,7 @@
 package mk.finki.ukim.lab.service.application.impl;
 
-import mk.finki.ukim.lab.model.dto.BookRequestDTO;
-import mk.finki.ukim.lab.model.dto.BookResponseDTO;
+import mk.finki.ukim.lab.dto.BookRequestDTO;
+import mk.finki.ukim.lab.dto.BookResponseDTO;
 import mk.finki.ukim.lab.service.application.BookApplicationService;
 import mk.finki.ukim.lab.service.domain.BookService;
 import org.springframework.stereotype.Service;

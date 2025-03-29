@@ -1,6 +1,6 @@
-package mk.finki.ukim.lab.model.dto;
+package mk.finki.ukim.lab.dto;
 
-import mk.finki.ukim.lab.model.Author;
+import mk.finki.ukim.lab.model.domain.Author;
 
 public record AuthorResponseDTO(Long id, String name, String surname, Long countryId) {
 

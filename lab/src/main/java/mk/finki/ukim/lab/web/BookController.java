@@ -1,7 +1,7 @@
 package mk.finki.ukim.lab.web;
 
-import mk.finki.ukim.lab.model.dto.BookRequestDTO;
-import mk.finki.ukim.lab.model.dto.BookResponseDTO;
+import mk.finki.ukim.lab.dto.BookRequestDTO;
+import mk.finki.ukim.lab.dto.BookResponseDTO;
 import mk.finki.ukim.lab.service.application.BookApplicationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

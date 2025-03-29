@@ -1,7 +1,7 @@
 package mk.finki.ukim.lab.service.application.impl;
 
-import mk.finki.ukim.lab.model.dto.CountryRequestDTO;
-import mk.finki.ukim.lab.model.dto.CountryResponseDTO;
+import mk.finki.ukim.lab.dto.CountryRequestDTO;
+import mk.finki.ukim.lab.dto.CountryResponseDTO;
 import mk.finki.ukim.lab.service.application.CountryApplicationService;
 import mk.finki.ukim.lab.service.domain.CountryService;
 import org.springframework.stereotype.Service;
