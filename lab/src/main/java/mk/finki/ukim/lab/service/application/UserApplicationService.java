@@ -12,6 +12,8 @@ public interface UserApplicationService {
 
     Optional<UserResponseDTO> findByUsername(String username);
 
+    Optional<UserWishlistResponseDTO> findUserWishlist(String username);
+
     Optional<UserWishlistResponseDTO> addBookToWishlist(UserWishlistRequestDTO userWishlistRequestDTO);
 
     Optional<UserWishlistResponseDTO> removeBookFromWishlist(UserWishlistRequestDTO userWishlistRequestDTO);

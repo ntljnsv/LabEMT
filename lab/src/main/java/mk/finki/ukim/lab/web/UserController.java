@@ -71,6 +71,20 @@ public class UserController {
     }
 
 
+    @Operation(summary = "Get all books in user wishlist",
+            description = "Retrieves all of the books in a user's wishlist")
+    @GetMapping("/wishlist/{username}")
+    public ResponseEntity<UserWishlistResponseDTO> getUserWishlist(
+            @PathVariable String username) {
+        try {
+            return userApplicationService.findUserWishlist(username)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (BookNotFoundException | NoAvailableCopiesException exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @Operation(summary = "Add book to wishlist", description = "Adds a book to user's wishlist")
     @PostMapping("/wishlist/add")
     public ResponseEntity<UserWishlistResponseDTO> addBookToWishlist(

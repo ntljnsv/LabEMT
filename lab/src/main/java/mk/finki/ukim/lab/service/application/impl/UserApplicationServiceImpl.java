@@ -47,6 +47,12 @@ public class UserApplicationServiceImpl implements UserApplicationService {
     }
 
     @Override
+    public Optional<UserWishlistResponseDTO> findUserWishlist(String username) {
+        return userService.findByUsername(username)
+                .map(UserWishlistResponseDTO::fromEntity);
+    }
+
+    @Override
     public Optional<UserWishlistResponseDTO> addBookToWishlist(UserWishlistRequestDTO userWishlistRequestDTO) {
 
         return userService
