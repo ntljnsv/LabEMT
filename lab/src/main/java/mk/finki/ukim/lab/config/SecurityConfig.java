@@ -52,9 +52,10 @@ public class SecurityConfig {
                             "/api/countries",
                             "/api/user/login",
                             "/api/user/register",
-                            "/swagger-ui/**"
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**"
                         ).permitAll()
-                        .requestMatchers("/api/user/wishlist/**").authenticated()
+                        .requestMatchers("/api/user/wishlist/**").hasRole("USER")
                         .anyRequest().hasRole("LIBRARIAN"))
                 .formLogin((form) -> form.loginProcessingUrl(
                                 "/api/user/login")
