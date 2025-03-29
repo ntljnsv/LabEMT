@@ -1,13 +1,17 @@
 package mk.finki.ukim.lab.config;
 
 import jakarta.annotation.PostConstruct;
-import mk.finki.ukim.lab.model.Author;
-import mk.finki.ukim.lab.model.Book;
-import mk.finki.ukim.lab.model.Country;
+import mk.finki.ukim.lab.model.domain.Author;
+import mk.finki.ukim.lab.model.domain.Book;
+import mk.finki.ukim.lab.model.domain.Country;
+import mk.finki.ukim.lab.model.domain.User;
 import mk.finki.ukim.lab.model.enums.Category;
+import mk.finki.ukim.lab.model.enums.Role;
 import mk.finki.ukim.lab.repository.AuthorRepository;
 import mk.finki.ukim.lab.repository.BookRepository;
 import mk.finki.ukim.lab.repository.CountryRepository;
+import mk.finki.ukim.lab.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,11 +20,20 @@ public class DataInitializer {
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final CountryRepository countryRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(BookRepository bookRepository, AuthorRepository authorRepository, CountryRepository countryRepository) {
+    public DataInitializer(
+            BookRepository bookRepository,
+            AuthorRepository authorRepository,
+            CountryRepository countryRepository,
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.countryRepository = countryRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostConstruct
@@ -38,5 +51,21 @@ public class DataInitializer {
         bookRepository.save(new Book("Book1", Category.BIOGRAPHY, author1, 5));
         bookRepository.save(new Book("Book2", Category.THRILER, author2, 1));
         bookRepository.save(new Book("Book3", Category.HISTORY, author1, 0));
+
+        userRepository.save(new User(
+                "user",
+                passwordEncoder.encode("user"),
+                "Name",
+                "Surname",
+                Role.ROLE_USER
+        ));
+
+        userRepository.save(new User(
+                "lib",
+                passwordEncoder.encode("lib"),
+                "LibrarianName",
+                "LibrarianSurname",
+                Role.ROLE_LIBRARIAN
+        ));
     }
 }
