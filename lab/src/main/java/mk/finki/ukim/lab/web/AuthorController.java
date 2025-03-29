@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import mk.finki.ukim.lab.dto.AuthorRequestDTO;
 import mk.finki.ukim.lab.dto.AuthorResponseDTO;
+import mk.finki.ukim.lab.model.exceptions.AuthorNotFoundException;
+import mk.finki.ukim.lab.model.exceptions.CountryNotFoundException;
+import mk.finki.ukim.lab.model.exceptions.NoAvailableCopiesException;
 import mk.finki.ukim.lab.service.application.AuthorApplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,10 +35,14 @@ public class AuthorController {
     @Operation(summary = "Get author by ID", description = "Finds an author by their ID.")
     @GetMapping("/{id}")
     public ResponseEntity<AuthorResponseDTO> findById(@PathVariable Long id) {
+        try {
+            return authorService.findById(id)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (AuthorNotFoundException exception) {
+            return ResponseEntity.badRequest().build();
+        }
 
-        return authorService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Create new author", description = "Creates a new author.")
@@ -51,17 +58,25 @@ public class AuthorController {
     @PutMapping("/edit/{id}")
     public ResponseEntity<AuthorResponseDTO> update(@PathVariable Long id,
                                                     @RequestBody AuthorRequestDTO authorRequestDTO) {
+        try {
+            return authorService.update(id, authorRequestDTO)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.badRequest().build());
+        } catch (AuthorNotFoundException | CountryNotFoundException exception) {
+            return ResponseEntity.badRequest().build();
+        }
 
-        return authorService.update(id, authorRequestDTO)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
     @Operation(summary = "Delete author", description = "Deletes an author by their ID.")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
+        try {
+            return  ResponseEntity.ok(authorService.deleteById(id));
+        } catch (AuthorNotFoundException exception) {
+            return ResponseEntity.badRequest().build();
+        }
 
-        return  ResponseEntity.ok(authorService.deleteById(id));
     }
 
 }

@@ -5,6 +5,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import mk.finki.ukim.lab.dto.BookInventoryResponseDTO;
 import mk.finki.ukim.lab.dto.BookRequestDTO;
 import mk.finki.ukim.lab.dto.BookResponseDTO;
+import mk.finki.ukim.lab.model.exceptions.AuthorNotFoundException;
+import mk.finki.ukim.lab.model.exceptions.BookNotFoundException;
+import mk.finki.ukim.lab.model.exceptions.NoAvailableCopiesException;
 import mk.finki.ukim.lab.service.application.BookApplicationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,48 +40,73 @@ public class BookController {
     @Operation(summary = "Get book by ID", description = "Finds a book by it's ID.")
     @GetMapping("/{id}")
     public ResponseEntity<BookResponseDTO> findById(@PathVariable Long id) {
-        return bookService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        try {
+            return bookService.findById(id)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (BookNotFoundException exception) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "Create new book", description = "Creates a new book.")
     @PostMapping("/add")
     public ResponseEntity<BookResponseDTO> create(@RequestBody BookRequestDTO bookRequestDTO) {
-        return bookService.create(bookRequestDTO)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest().build());
+        try {
+            return bookService.create(bookRequestDTO)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.badRequest().build());
+        } catch (AuthorNotFoundException exception) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "Update existing book", description = "Updates a book by it's ID.")
     @PutMapping("/edit/{id}")
     public ResponseEntity<BookResponseDTO> update(@PathVariable Long id,
                                                  @RequestBody BookRequestDTO bookRequestDTO) {
-        return bookService.update(id, bookRequestDTO)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest().build());
+        try {
+            return bookService.update(id, bookRequestDTO)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.badRequest().build());
+        } catch (BookNotFoundException | AuthorNotFoundException exception) {
+            return ResponseEntity.badRequest().build();
+        }
+
     }
 
     @Operation(summary = "Delete book", description = "Deletes a book by it's ID.")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
-        return ResponseEntity.ok(bookService.deleteById(id));
+        try {
+            return ResponseEntity.ok(bookService.deleteById(id));
+        } catch (BookNotFoundException exception) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "Borrow book", description = "Borrows a book by it's ID.")
     @PostMapping("/borrow-book/{id}")
     public ResponseEntity<BookInventoryResponseDTO> borrowBook(@PathVariable Long id) {
-        return bookService.borrowBook(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
+        try {
+            return bookService.borrowBook(id)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
+        } catch (BookNotFoundException | NoAvailableCopiesException exception) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "Return book", description = "Returns a book by it's ID.")
     @PostMapping("/return-book/{id}")
     public ResponseEntity<BookInventoryResponseDTO> returnBook(@PathVariable Long id) {
-        return bookService.returnBook(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        try {
+            return bookService.returnBook(id)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (BookNotFoundException | NoAvailableCopiesException exception) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(

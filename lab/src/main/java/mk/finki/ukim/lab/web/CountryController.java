@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import mk.finki.ukim.lab.dto.CountryRequestDTO;
 import mk.finki.ukim.lab.dto.CountryResponseDTO;
+import mk.finki.ukim.lab.model.exceptions.CountryNotFoundException;
 import mk.finki.ukim.lab.service.application.CountryApplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +34,13 @@ public class CountryController {
     @Operation(summary = "Get country by ID", description = "Finds a country by it's ID.")
     @GetMapping("/{id}")
     public ResponseEntity<CountryResponseDTO> findById(@PathVariable Long id) {
-
-        return countryService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        try {
+            return countryService.findById(id)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (CountryNotFoundException exception) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "Create new country", description = "Creates a new country.")
@@ -52,16 +56,22 @@ public class CountryController {
     @PutMapping("/edit/{id}")
     public ResponseEntity<CountryResponseDTO> update(@PathVariable Long id,
                                                      @RequestBody CountryRequestDTO countryRequestDTO) {
-
-        return countryService.update(id, countryRequestDTO)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.badRequest().build());
+        try {
+            return countryService.update(id, countryRequestDTO)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.badRequest().build());
+        } catch (CountryNotFoundException exception) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "Delete country", description = "Deletes a country by it's ID.")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
-
-        return ResponseEntity.ok(countryService.deleteById(id));
+        try {
+            return ResponseEntity.ok(countryService.deleteById(id));
+        } catch (CountryNotFoundException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import mk.finki.ukim.lab.dto.*;
-import mk.finki.ukim.lab.model.exceptions.InvalidArgumentsException;
-import mk.finki.ukim.lab.model.exceptions.InvalidUserCredentialsException;
-import mk.finki.ukim.lab.model.exceptions.NoAvailableCopiesException;
-import mk.finki.ukim.lab.model.exceptions.PasswordsDoNotMatchException;
+import mk.finki.ukim.lab.model.exceptions.*;
 import mk.finki.ukim.lab.service.application.UserApplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -82,7 +79,7 @@ public class UserController {
             return userApplicationService.addBookToWishlist(userWishlistRequestDTO)
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
-        } catch (NoAvailableCopiesException exception) {
+        } catch (BookNotFoundException | NoAvailableCopiesException exception) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -95,7 +92,7 @@ public class UserController {
             return userApplicationService.removeBookFromWishlist(userWishlistRequestDTO)
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
-        } catch (NoAvailableCopiesException exception) {
+        } catch (BookNotFoundException | NoAvailableCopiesException exception) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -108,7 +105,7 @@ public class UserController {
             return userApplicationService.borrowBookFromWishlist(userWishlistRequestDTO)
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
-        } catch (NoAvailableCopiesException exception) {
+        } catch (BookNotFoundException | NoAvailableCopiesException exception) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -121,7 +118,7 @@ public class UserController {
             return userApplicationService.borrowAllBooksFromWishlist(username)
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
-        } catch (NoAvailableCopiesException exception) {
+        } catch (BookNotFoundException | NoAvailableCopiesException exception) {
             return ResponseEntity.badRequest().build();
         }
     }
