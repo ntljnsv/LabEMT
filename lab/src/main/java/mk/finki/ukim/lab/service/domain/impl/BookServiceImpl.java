@@ -1,7 +1,6 @@
 package mk.finki.ukim.lab.service.domain.impl;
 
 import mk.finki.ukim.lab.model.domain.Book;
-import mk.finki.ukim.lab.model.domain.BookInventory;
 import mk.finki.ukim.lab.model.enums.Category;
 import mk.finki.ukim.lab.model.exceptions.AuthorNotFoundException;
 import mk.finki.ukim.lab.model.exceptions.BookNotFoundException;
@@ -93,17 +92,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> findByNameOrAuthor(String query) {
         return bookRepository.findByNameContainingOrAuthor_NameOrAuthor_Surname(query, query, query);
-    }
-
-
-    @Override
-    public Optional<BookInventory> borrowBook(Long id) {
-        return bookInventoryService.borrowBook(id);
-    }
-
-    @Override
-    public Optional<BookInventory> returnBook(Long id) {
-        return bookInventoryService.returnBook(id);
     }
 
 }

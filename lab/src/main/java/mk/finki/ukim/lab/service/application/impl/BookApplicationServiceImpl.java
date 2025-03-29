@@ -4,7 +4,9 @@ import mk.finki.ukim.lab.dto.BookInventoryResponseDTO;
 import mk.finki.ukim.lab.dto.BookRequestDTO;
 import mk.finki.ukim.lab.dto.BookResponseDTO;
 import mk.finki.ukim.lab.service.application.BookApplicationService;
+import mk.finki.ukim.lab.service.domain.BookInventoryService;
 import mk.finki.ukim.lab.service.domain.BookService;
+import org.springframework.boot.web.servlet.filter.OrderedFormContentFilter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +16,11 @@ import java.util.Optional;
 public class BookApplicationServiceImpl implements BookApplicationService {
 
     private final BookService bookService;
+    private final BookInventoryService bookInventoryService;
 
-    public BookApplicationServiceImpl(BookService bookService) {
+    public BookApplicationServiceImpl(BookService bookService, BookInventoryService bookInventoryService, OrderedFormContentFilter formContentFilter) {
         this.bookService = bookService;
+        this.bookInventoryService = bookInventoryService;
     }
 
     @Override
@@ -54,12 +58,12 @@ public class BookApplicationServiceImpl implements BookApplicationService {
 
     @Override
     public Optional<BookInventoryResponseDTO> borrowBook(Long id) {
-        return bookService.borrowBook(id).map(BookInventoryResponseDTO::fromEntity);
+        return bookInventoryService.borrowBook(id).map(BookInventoryResponseDTO::fromEntity);
     }
 
     @Override
     public Optional<BookInventoryResponseDTO> returnBook(Long id) {
-        return bookService.returnBook(id).map(BookInventoryResponseDTO::fromEntity);
+        return bookInventoryService.borrowBook(id).map(BookInventoryResponseDTO::fromEntity);
     }
 
     @Override

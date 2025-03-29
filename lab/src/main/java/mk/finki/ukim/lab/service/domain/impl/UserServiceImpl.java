@@ -1,10 +1,10 @@
 package mk.finki.ukim.lab.service.domain.impl;
 
-import mk.finki.ukim.lab.model.domain.Book;
 import mk.finki.ukim.lab.model.domain.User;
 import mk.finki.ukim.lab.model.enums.Role;
 import mk.finki.ukim.lab.model.exceptions.*;
 import mk.finki.ukim.lab.repository.UserRepository;
+import mk.finki.ukim.lab.service.domain.BookInventoryService;
 import mk.finki.ukim.lab.service.domain.BookService;
 import mk.finki.ukim.lab.service.domain.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,13 +21,16 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final BookService bookService;
+    private final BookInventoryService bookInventoryService;
 
     public UserServiceImpl(UserRepository userRepository,
                            PasswordEncoder passwordEncoder,
-                           BookService bookService) {
+                           BookService bookService,
+                           BookInventoryService bookInventoryService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.bookService = bookService;
+        this.bookInventoryService = bookInventoryService;
     }
 
     @Override
@@ -66,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
         User user = findByUsername(username).get();
         user.getWishlist().remove(bookService.findById(bookId).get());
-        bookService.borrowBook(bookId);
+        bookInventoryService.borrowBook(bookId);
         return Optional.of(userRepository.save(user));
     }
 
@@ -74,7 +77,7 @@ public class UserServiceImpl implements UserService {
     public Optional<User> borrowAllBooksFromWishlist(String username) {
 
         User user = findByUsername(username).get();
-        user.getWishlist().forEach(book -> bookService.borrowBook(book.getId()));
+        user.getWishlist().forEach(book -> bookInventoryService.borrowBook(book.getId()));
         user.setWishlist(new HashSet<>());
         return Optional.of(userRepository.save(user));
     }

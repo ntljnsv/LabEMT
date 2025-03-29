@@ -20,9 +20,5 @@ public interface BookService {
 
     boolean hasAvailableCopies(Long id);
 
-    Optional<BookInventory> borrowBook(Long id);
-
-    Optional<BookInventory> returnBook(Long id);
-
     List<Book> findByNameOrAuthor(String query);
 }

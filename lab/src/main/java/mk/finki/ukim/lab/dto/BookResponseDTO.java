@@ -2,7 +2,7 @@ package mk.finki.ukim.lab.dto;
 
 import mk.finki.ukim.lab.model.domain.Book;
 
-public record BookResponseDTO (Long id, String name, String category, Long authorId) {
+public record BookResponseDTO (Long id, String name, String category, Long authorId, int availableCopies) {
 
     public static BookResponseDTO fromEntity(Book book) {
 
@@ -10,7 +10,8 @@ public record BookResponseDTO (Long id, String name, String category, Long autho
                 book.getId(),
                 book.getName(),
                 book.getCategory().name(),
-                book.getAuthor().getId()
+                book.getAuthor().getId(),
+                book.getInventory().getAvailableCopies()
         );
     }
 }
