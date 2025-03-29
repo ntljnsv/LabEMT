@@ -43,14 +43,17 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(
                         corsConfigurationSource()))
-                .authorizeHttpRequests(requests -> requests.requestMatchers(
-                        "/api/authors",
-                        "/api/books",
-                        "/api/countries",
-                        "/api/user/login",
-                        "/api/user/register",
-                        "/swagger-ui/**"
-                ).permitAll().anyRequest().hasRole("LIBRARIAN"))
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers(
+                            "/api/authors",
+                            "/api/books",
+                            "/api/countries",
+                            "/api/user/login",
+                            "/api/user/register",
+                            "/swagger-ui/**"
+                        ).permitAll()
+                        .requestMatchers("/api/user/wishlist/**").authenticated()
+                        .anyRequest().hasRole("LIBRARIAN"))
                 .formLogin((form) -> form.loginProcessingUrl(
                                 "/api/user/login")
                         .permitAll()

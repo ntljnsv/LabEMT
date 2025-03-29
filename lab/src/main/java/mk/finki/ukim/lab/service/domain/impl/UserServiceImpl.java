@@ -1,15 +1,18 @@
 package mk.finki.ukim.lab.service.domain.impl;
 
+import mk.finki.ukim.lab.model.domain.Book;
 import mk.finki.ukim.lab.model.domain.User;
 import mk.finki.ukim.lab.model.enums.Role;
 import mk.finki.ukim.lab.model.exceptions.*;
 import mk.finki.ukim.lab.repository.UserRepository;
+import mk.finki.ukim.lab.service.domain.BookService;
 import mk.finki.ukim.lab.service.domain.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 @Service
@@ -17,10 +20,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final BookService bookService;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository,
+                           PasswordEncoder passwordEncoder,
+                           BookService bookService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.bookService = bookService;
     }
 
     @Override
@@ -33,6 +40,39 @@ public class UserServiceImpl implements UserService {
     public Optional<User> findByUsername(String username) {
         return Optional.of(userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
                 username)));
+    }
+
+    @Override
+    public Optional<User> addBookToWishlist(String username, Long bookId) {
+        User user = findByUsername(username).get();
+        if(!bookService.hasAvailableCopies(bookId)) {
+            throw new NoAvailableCopiesException(bookId);
+        }
+        user.getWishlist().add(bookService.findById(bookId).get());
+        return Optional.of(userRepository.save(user));
+    }
+
+    @Override
+    public Optional<User> removeBookFromWishlist(String username, Long bookId) {
+        User user = findByUsername(username).get();
+        user.getWishlist().remove(bookService.findById(bookId).get());
+        return Optional.of(userRepository.save(user));
+    }
+
+    @Override
+    public Optional<User> borrowBookFromWishlist(String username, Long bookId) {
+        User user = findByUsername(username).get();
+        user.getWishlist().remove(bookService.findById(bookId).get());
+        bookService.borrowBook(bookId);
+        return Optional.of(userRepository.save(user));
+    }
+
+    @Override
+    public Optional<User> borrowAllBooksFromWishlist(String username) {
+        User user = findByUsername(username).get();
+        user.getWishlist().forEach(book -> bookService.borrowBook(book.getId()));
+        user.setWishlist(new HashSet<>());
+        return Optional.of(userRepository.save(user));
     }
 
     @Override

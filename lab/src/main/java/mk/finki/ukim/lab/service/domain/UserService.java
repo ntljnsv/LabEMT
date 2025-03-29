@@ -14,4 +14,12 @@ public interface UserService extends UserDetailsService {
 
     Optional<User> findByUsername(String username);
 
+    Optional<User> addBookToWishlist(String username, Long bookId);
+
+    Optional<User> removeBookFromWishlist(String username, Long bookId);
+
+    Optional<User> borrowBookFromWishlist(String username, Long bookId);
+
+    Optional<User> borrowAllBooksFromWishlist(String username);
+
 }

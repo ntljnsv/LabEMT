@@ -1,8 +1,7 @@
 package mk.finki.ukim.lab.service.application.impl;
 
-import mk.finki.ukim.lab.dto.UserCreateDTO;
-import mk.finki.ukim.lab.dto.UserLoginDTO;
-import mk.finki.ukim.lab.dto.UserResponseDTO;
+import mk.finki.ukim.lab.dto.*;
+import mk.finki.ukim.lab.model.domain.User;
 import mk.finki.ukim.lab.service.application.UserApplicationService;
 import mk.finki.ukim.lab.service.domain.UserService;
 import org.springframework.stereotype.Service;
@@ -45,5 +44,34 @@ public class UserApplicationServiceImpl implements UserApplicationService {
 
         return userService.findByUsername(username)
                 .map(UserResponseDTO::fromEntity);
+    }
+
+    @Override
+    public Optional<UserWishlistResponseDTO> addBookToWishlist(UserWishlistRequestDTO userWishlistRequestDTO) {
+
+        return userService
+                .addBookToWishlist(userWishlistRequestDTO.username(), userWishlistRequestDTO.bookId())
+                .map(UserWishlistResponseDTO::fromEntity);
+    }
+
+    @Override
+    public Optional<UserWishlistResponseDTO> removeBookFromWishlist(UserWishlistRequestDTO userWishlistRequestDTO) {
+
+        return userService.removeBookFromWishlist(userWishlistRequestDTO.username(), userWishlistRequestDTO.bookId())
+                .map(UserWishlistResponseDTO::fromEntity);
+    }
+
+    @Override
+    public Optional<UserWishlistResponseDTO> borrowBookFromWishlist(UserWishlistRequestDTO userWishlistRequestDTO) {
+        return userService.borrowBookFromWishlist(userWishlistRequestDTO.username(), userWishlistRequestDTO.bookId())
+                .map(UserWishlistResponseDTO::fromEntity);
+    }
+
+
+    @Override
+    public Optional<UserWishlistResponseDTO> borrowAllBooksFromWishlist(String username) {
+
+        return userService.borrowAllBooksFromWishlist(username)
+                .map(UserWishlistResponseDTO::fromEntity);
     }
 }

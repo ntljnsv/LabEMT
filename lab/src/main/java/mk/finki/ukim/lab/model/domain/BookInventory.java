@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -23,4 +25,18 @@ public class BookInventory {
         this.book = book;
         this.availableCopies = availableCopies;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        BookInventory inventory = (BookInventory) obj;
+        return Objects.equals(id, inventory.id);
+    }
+
 }

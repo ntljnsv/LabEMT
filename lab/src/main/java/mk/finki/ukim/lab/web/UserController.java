@@ -5,11 +5,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import mk.finki.ukim.lab.dto.UserCreateDTO;
-import mk.finki.ukim.lab.dto.UserLoginDTO;
-import mk.finki.ukim.lab.dto.UserResponseDTO;
+import mk.finki.ukim.lab.dto.*;
 import mk.finki.ukim.lab.model.exceptions.InvalidArgumentsException;
 import mk.finki.ukim.lab.model.exceptions.InvalidUserCredentialsException;
+import mk.finki.ukim.lab.model.exceptions.NoAvailableCopiesException;
 import mk.finki.ukim.lab.model.exceptions.PasswordsDoNotMatchException;
 import mk.finki.ukim.lab.service.application.UserApplicationService;
 import org.springframework.http.ResponseEntity;
@@ -73,5 +72,59 @@ public class UserController {
     public void logout(HttpServletRequest request) {
         request.getSession().invalidate();
     }
+
+
+    @Operation(summary = "Add book to wishlist", description = "Adds a book to user's wishlist")
+    @PostMapping("/wishlist/add")
+    public ResponseEntity<UserWishlistResponseDTO> addBookToWishlist(
+            @RequestBody UserWishlistRequestDTO userWishlistRequestDTO) {
+        try {
+            return userApplicationService.addBookToWishlist(userWishlistRequestDTO)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (NoAvailableCopiesException exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @Operation(summary = "Remove book from wishlist", description = "Removes a book from the user's wishlist")
+    @PostMapping("/wishlist/remove")
+    public ResponseEntity<UserWishlistResponseDTO> removeBookFromWishlist(
+            @RequestBody UserWishlistRequestDTO userWishlistRequestDTO) {
+        try {
+            return userApplicationService.removeBookFromWishlist(userWishlistRequestDTO)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (NoAvailableCopiesException exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @Operation(summary = "Borrow book from wishlist", description = "Borrows a book from the user's wishlist")
+    @PostMapping("/wishlist/borrow")
+    public ResponseEntity<UserWishlistResponseDTO> borrow(
+            @RequestBody UserWishlistRequestDTO userWishlistRequestDTO) {
+        try {
+            return userApplicationService.borrowBookFromWishlist(userWishlistRequestDTO)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (NoAvailableCopiesException exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @Operation(summary = "Borrow all books from wishlist", description = "Borrows/Removes all of the books from a user's wishlist")
+    @PostMapping("/wishlist/borrow-all/{username}")
+    public ResponseEntity<UserWishlistResponseDTO> borrowAllBooksFromWishlist(
+            @PathVariable String username) {
+        try {
+            return userApplicationService.borrowAllBooksFromWishlist(username)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (NoAvailableCopiesException exception) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }
 

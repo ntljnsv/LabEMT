@@ -88,6 +88,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public boolean hasAvailableCopies(Long id) {
+        return bookInventoryService.getNumberOfCopiesByBookId(id) > 0;
+    }
+
+    @Override
     public List<Book> findByNameOrAuthor(String query) {
         return bookRepository.findByNameContainingOrAuthor_NameOrAuthor_Surname(query, query, query);
     }
