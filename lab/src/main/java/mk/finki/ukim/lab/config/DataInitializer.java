@@ -49,7 +49,7 @@ public class DataInitializer {
         authorRepository.save(author2);
 
         bookRepository.save(new Book("Book1", Category.BIOGRAPHY, author1, 5));
-        bookRepository.save(new Book("Book2", Category.THRILER, author2, 1));
+        bookRepository.save(new Book("Book2", Category.THRILLER, author2, 1));
         bookRepository.save(new Book("Book3", Category.HISTORY, author1, 0));
 
         userRepository.save(new User(
