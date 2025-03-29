@@ -1,5 +1,7 @@
 package mk.finki.ukim.lab.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import mk.finki.ukim.lab.dto.AuthorRequestDTO;
 import mk.finki.ukim.lab.dto.AuthorResponseDTO;
 import mk.finki.ukim.lab.service.application.AuthorApplicationService;
@@ -10,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/authors")
-
+@Tag(name = "Author API", description = "Endpoints for managing authors")
 public class AuthorController {
     private final AuthorApplicationService authorService;
 
@@ -18,12 +20,16 @@ public class AuthorController {
         this.authorService = authorService;
     }
 
+    @Operation(
+            summary = "Get all authors", description = "Retrieves a list of all authors."
+    )
     @GetMapping
     public List<AuthorResponseDTO> listAll() {
 
         return authorService.listAll();
     }
 
+    @Operation(summary = "Get author by ID", description = "Finds an author by their ID.")
     @GetMapping("/{id}")
     public ResponseEntity<AuthorResponseDTO> findById(@PathVariable Long id) {
 
@@ -32,6 +38,7 @@ public class AuthorController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Create new author", description = "Creates a new author.")
     @PostMapping("/add")
     public ResponseEntity<AuthorResponseDTO> create(@RequestBody AuthorRequestDTO authorRequestDTO) {
 
@@ -40,6 +47,7 @@ public class AuthorController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @Operation(summary = "Update existing author", description = "Updates an author by their ID.")
     @PutMapping("/edit/{id}")
     public ResponseEntity<AuthorResponseDTO> update(@PathVariable Long id,
                                                     @RequestBody AuthorRequestDTO authorRequestDTO) {
@@ -49,6 +57,7 @@ public class AuthorController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @Operation(summary = "Delete author", description = "Deletes an author by their ID.")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
 

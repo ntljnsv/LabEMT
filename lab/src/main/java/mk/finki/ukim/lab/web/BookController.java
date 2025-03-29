@@ -1,5 +1,7 @@
 package mk.finki.ukim.lab.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import mk.finki.ukim.lab.dto.BookRequestDTO;
 import mk.finki.ukim.lab.dto.BookResponseDTO;
 import mk.finki.ukim.lab.service.application.BookApplicationService;
@@ -13,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
+@Tag(name = "Book API", description = "Endpoints for managing books")
 public class BookController {
 
     private final BookApplicationService bookService;
@@ -21,11 +24,16 @@ public class BookController {
         this.bookService = bookService;
     }
 
+    @Operation(
+            summary = "Get all books", description = "Retrieves a list of all books."
+    )
     @GetMapping
     public List<BookResponseDTO> listAll() {
         return bookService.listAll();
     }
 
+
+    @Operation(summary = "Get book by ID", description = "Finds a book by it's ID.")
     @GetMapping("/{id}")
     public ResponseEntity<BookResponseDTO> findById(@PathVariable Long id) {
         return bookService.findById(id)
@@ -33,6 +41,7 @@ public class BookController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Create new book", description = "Creates a new book.")
     @PostMapping("/add")
     public ResponseEntity<BookResponseDTO> create(@RequestBody BookRequestDTO bookRequestDTO) {
         return bookService.create(bookRequestDTO)
@@ -40,6 +49,7 @@ public class BookController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @Operation(summary = "Update existing book", description = "Updates a book by it's ID.")
     @PutMapping("/edit/{id}")
     public ResponseEntity<BookResponseDTO> update(@PathVariable Long id,
                                                  @RequestBody BookRequestDTO bookRequestDTO) {
@@ -48,11 +58,13 @@ public class BookController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @Operation(summary = "Delete book", description = "Deletes a book by it's ID.")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         return ResponseEntity.ok(bookService.deleteById(id));
     }
 
+    @Operation(summary = "Borrow book", description = "Borrows a book by it's ID.")
     @PostMapping("/borrow-book/{id}")
     public ResponseEntity<BookResponseDTO> borrowBook(@PathVariable Long id) {
         return bookService.borrowBook(id)
@@ -60,6 +72,7 @@ public class BookController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).build());
     }
 
+    @Operation(summary = "Return book", description = "Returns a book by it's ID.")
     @PostMapping("/return-book/{id}")
     public ResponseEntity<BookResponseDTO> returnBook(@PathVariable Long id) {
         return bookService.returnBook(id)
@@ -67,7 +80,9 @@ public class BookController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
+    @Operation(
+            summary = "Search book by name or author name",
+            description = "Find a book by name or it's authors name.")
     @GetMapping("/search")
     public List<BookResponseDTO> findByNameOrAuthor(@RequestParam String query) {
         return bookService.findByNameOrAuthor(query);

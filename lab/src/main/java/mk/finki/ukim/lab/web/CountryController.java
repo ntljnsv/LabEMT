@@ -1,5 +1,7 @@
 package mk.finki.ukim.lab.web;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import mk.finki.ukim.lab.dto.CountryRequestDTO;
 import mk.finki.ukim.lab.dto.CountryResponseDTO;
 import mk.finki.ukim.lab.service.application.CountryApplicationService;
@@ -10,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/countries")
+@Tag(name = "Country API", description = "Endpoints for managing countries")
 public class CountryController {
 
     private final CountryApplicationService countryService;
@@ -18,12 +21,16 @@ public class CountryController {
         this.countryService = countryService;
     }
 
+    @Operation(
+            summary = "Get all countries", description = "Retrieves a list of all countries."
+    )
     @GetMapping
     public List<CountryResponseDTO> listAll() {
 
         return countryService.listAll();
     }
 
+    @Operation(summary = "Get country by ID", description = "Finds a country by it's ID.")
     @GetMapping("/{id}")
     public ResponseEntity<CountryResponseDTO> findById(@PathVariable Long id) {
 
@@ -32,6 +39,7 @@ public class CountryController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Create new country", description = "Creates a new country.")
     @PostMapping("/add")
     public ResponseEntity<CountryResponseDTO> create(@RequestBody CountryRequestDTO countryRequestDTO) {
 
@@ -40,6 +48,7 @@ public class CountryController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @Operation(summary = "Update existing country", description = "Updates a country by it's ID.")
     @PutMapping("/edit/{id}")
     public ResponseEntity<CountryResponseDTO> update(@PathVariable Long id,
                                                      @RequestBody CountryRequestDTO countryRequestDTO) {
@@ -49,6 +58,7 @@ public class CountryController {
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @Operation(summary = "Delete country", description = "Deletes a country by it's ID.")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
 
