@@ -1,6 +1,6 @@
 package mk.finki.ukim.lab.service.domain;
 
-import mk.finki.ukim.lab.model.Author;
+import mk.finki.ukim.lab.model.domain.Author;
 
 import java.util.List;
 import java.util.Optional;

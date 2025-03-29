@@ -1,7 +1,7 @@
 package mk.finki.ukim.lab.service.domain.impl;
 
-import mk.finki.ukim.lab.model.Author;
-import mk.finki.ukim.lab.model.Country;
+import mk.finki.ukim.lab.model.domain.Author;
+import mk.finki.ukim.lab.model.domain.Country;
 import mk.finki.ukim.lab.model.exceptions.AuthorNotFoundException;
 import mk.finki.ukim.lab.model.exceptions.CountryNotFoundException;
 import mk.finki.ukim.lab.repository.AuthorRepository;

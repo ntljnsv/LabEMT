@@ -1,6 +1,6 @@
 package mk.finki.ukim.lab.service.domain.impl;
 
-import mk.finki.ukim.lab.model.Book;
+import mk.finki.ukim.lab.model.domain.Book;
 import mk.finki.ukim.lab.model.enums.Category;
 import mk.finki.ukim.lab.model.exceptions.AuthorNotFoundException;
 import mk.finki.ukim.lab.model.exceptions.BookNotFoundException;
