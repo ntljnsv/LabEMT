@@ -1,5 +1,6 @@
 package mk.finki.ukim.lab.service.domain.impl;
 
+import mk.finki.ukim.lab.model.domain.Book;
 import mk.finki.ukim.lab.model.domain.User;
 import mk.finki.ukim.lab.model.enums.Role;
 import mk.finki.ukim.lab.model.exceptions.*;
@@ -51,6 +52,10 @@ public class UserServiceImpl implements UserService {
         User user = findByUsername(username).get();
         if(!bookService.hasAvailableCopies(bookId)) {
             throw new NoAvailableCopiesException(bookId);
+        }
+        Book book = bookService.findById(bookId).get();
+        if(user.getWishlist().contains(book)) {
+            throw new BookAlreadyInWishlistException(username, bookId);
         }
         user.getWishlist().add(bookService.findById(bookId).get());
         return Optional.of(userRepository.save(user));

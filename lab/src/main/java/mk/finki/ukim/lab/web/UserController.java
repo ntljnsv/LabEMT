@@ -6,10 +6,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import mk.finki.ukim.lab.dto.*;
+import mk.finki.ukim.lab.model.api_exception.ApiError;
 import mk.finki.ukim.lab.model.exceptions.*;
 import mk.finki.ukim.lab.service.application.UserApplicationService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/user")
@@ -87,14 +90,14 @@ public class UserController {
 
     @Operation(summary = "Add book to wishlist", description = "Adds a book to user's wishlist")
     @PostMapping("/wishlist/add")
-    public ResponseEntity<UserWishlistResponseDTO> addBookToWishlist(
-            @RequestBody UserWishlistRequestDTO userWishlistRequestDTO) {
+    public ResponseEntity<?> addBookToWishlist(
+            @RequestBody UserWishlistRequestDTO userWishlistRequestDTO) throws ResponseStatusException {
         try {
             return userApplicationService.addBookToWishlist(userWishlistRequestDTO)
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
-        } catch (BookNotFoundException | NoAvailableCopiesException exception) {
-            return ResponseEntity.badRequest().build();
+        } catch (BookNotFoundException | NoAvailableCopiesException | BookAlreadyInWishlistException exception) {
+            return ResponseEntity.badRequest().body(new ApiError(HttpStatus.BAD_REQUEST, exception));
         }
     }
 
