@@ -111,8 +111,11 @@ public class UserServiceImpl implements UserService {
         if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
             throw new InvalidArgumentsException();
         }
-        return Optional.of(userRepository.findByUsernameAndPassword(username, password).orElseThrow(
-                InvalidUserCredentialsException::new));
+        User user = userRepository.findByUsername(username).orElseThrow(InvalidUserCredentialsException::new);
+        if(!passwordEncoder.matches(password, user.getPassword())) {
+            throw new InvalidUserCredentialsException();
+        }
+        return Optional.of(user);
     }
 
 }

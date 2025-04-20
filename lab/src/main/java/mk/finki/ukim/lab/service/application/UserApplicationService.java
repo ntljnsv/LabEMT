@@ -8,7 +8,7 @@ public interface UserApplicationService {
 
     Optional<UserResponseDTO> register(UserCreateDTO createUserDto);
 
-    Optional<UserResponseDTO> login(UserLoginDTO loginUserDto);
+    Optional<LoginResponseDTO> login(UserLoginDTO loginUserDto);
 
     Optional<UserResponseDTO> findByUsername(String username);
 

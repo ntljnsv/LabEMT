@@ -4,13 +4,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import mk.finki.ukim.lab.dto.*;
 import mk.finki.ukim.lab.model.api_exception.ApiError;
+import mk.finki.ukim.lab.model.domain.User;
 import mk.finki.ukim.lab.model.exceptions.*;
 import mk.finki.ukim.lab.service.application.UserApplicationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -45,7 +46,7 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "User login", description = "Authenticates a user and starts a session")
+    @Operation(summary = "User login", description = "Authenticates a user and generates a JWT")
     @ApiResponses(
             value = {@ApiResponse(
                     responseCode = "200",
@@ -53,34 +54,24 @@ public class UserController {
             ), @ApiResponse(responseCode = "404", description = "Invalid username or password")}
     )
     @PostMapping("/login")
-    public ResponseEntity<UserResponseDTO> login(HttpServletRequest request) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody UserLoginDTO loginUserDto) {
         try {
-            UserResponseDTO userResponseDTO = userApplicationService.login(
-                    new UserLoginDTO(request.getParameter("username"), request.getParameter("password"))
-            ).orElseThrow(InvalidUserCredentialsException::new);
-
-            request.getSession().setAttribute("user", userResponseDTO.toEntity());
-            return ResponseEntity.ok(userResponseDTO);
+            return userApplicationService.login(loginUserDto)
+                    .map(ResponseEntity::ok)
+                    .orElseThrow(InvalidUserCredentialsException::new);
         } catch (InvalidUserCredentialsException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @Operation(summary = "User logout", description = "Ends the user's session")
-    @ApiResponse(responseCode = "200", description = "User logged out successfully")
-    @GetMapping("/logout")
-    public void logout(HttpServletRequest request) {
-        request.getSession().invalidate();
-    }
 
 
     @Operation(summary = "Get all books in user wishlist",
             description = "Retrieves all of the books in a user's wishlist")
-    @GetMapping("/wishlist/{username}")
-    public ResponseEntity<UserWishlistResponseDTO> getUserWishlist(
-            @PathVariable String username) {
+    @GetMapping("/wishlist")
+    public ResponseEntity<UserWishlistResponseDTO> getUserWishlist(@AuthenticationPrincipal User user) {
         try {
-            return userApplicationService.findUserWishlist(username)
+            return userApplicationService.findUserWishlist(user.getUsername())
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
         } catch (BookNotFoundException | NoAvailableCopiesException exception) {
@@ -90,10 +81,10 @@ public class UserController {
 
     @Operation(summary = "Add book to wishlist", description = "Adds a book to user's wishlist")
     @PostMapping("/wishlist/add")
-    public ResponseEntity<?> addBookToWishlist(
-            @RequestBody UserWishlistRequestDTO userWishlistRequestDTO) throws ResponseStatusException {
+    public ResponseEntity<?> addBookToWishlist(@AuthenticationPrincipal User user,
+                                               @RequestParam Long bookId) throws ResponseStatusException {
         try {
-            return userApplicationService.addBookToWishlist(userWishlistRequestDTO)
+            return userApplicationService.addBookToWishlist(new UserWishlistRequestDTO(user.getUsername(), bookId))
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
         } catch (BookNotFoundException | NoAvailableCopiesException | BookAlreadyInWishlistException exception) {
@@ -103,10 +94,11 @@ public class UserController {
 
     @Operation(summary = "Remove book from wishlist", description = "Removes a book from the user's wishlist")
     @PostMapping("/wishlist/remove")
-    public ResponseEntity<UserWishlistResponseDTO> removeBookFromWishlist(
-            @RequestBody UserWishlistRequestDTO userWishlistRequestDTO) {
+    public ResponseEntity<UserWishlistResponseDTO> removeBookFromWishlist(@AuthenticationPrincipal User user,
+                                                                          @RequestParam Long bookId ) {
         try {
-            return userApplicationService.removeBookFromWishlist(userWishlistRequestDTO)
+            UserWishlistRequestDTO dto =  new UserWishlistRequestDTO(user.getUsername(), bookId);
+            return userApplicationService.removeBookFromWishlist(dto)
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
         } catch (BookNotFoundException | NoAvailableCopiesException exception) {
@@ -116,10 +108,11 @@ public class UserController {
 
     @Operation(summary = "Borrow book from wishlist", description = "Borrows a book from the user's wishlist")
     @PostMapping("/wishlist/borrow")
-    public ResponseEntity<UserWishlistResponseDTO> borrow(
-            @RequestBody UserWishlistRequestDTO userWishlistRequestDTO) {
+    public ResponseEntity<UserWishlistResponseDTO> borrow(@AuthenticationPrincipal User user,
+                                                          @RequestParam Long bookId) {
         try {
-            return userApplicationService.borrowBookFromWishlist(userWishlistRequestDTO)
+            UserWishlistRequestDTO dto =  new UserWishlistRequestDTO(user.getUsername(), bookId);
+            return userApplicationService.borrowBookFromWishlist(dto)
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
         } catch (BookNotFoundException | NoAvailableCopiesException exception) {
@@ -128,11 +121,10 @@ public class UserController {
     }
 
     @Operation(summary = "Borrow all books from wishlist", description = "Borrows/Removes all of the books from a user's wishlist")
-    @PostMapping("/wishlist/borrow-all/{username}")
-    public ResponseEntity<UserWishlistResponseDTO> borrowAllBooksFromWishlist(
-            @PathVariable String username) {
+    @PostMapping("/wishlist/borrow-all")
+    public ResponseEntity<UserWishlistResponseDTO> borrowAllBooksFromWishlist(@AuthenticationPrincipal User user) {
         try {
-            return userApplicationService.borrowAllBooksFromWishlist(username)
+            return userApplicationService.borrowAllBooksFromWishlist(user.getUsername())
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
         } catch (BookNotFoundException | NoAvailableCopiesException exception) {
