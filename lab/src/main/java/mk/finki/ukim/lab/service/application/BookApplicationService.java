@@ -24,4 +24,6 @@ public interface BookApplicationService {
     Optional<BookInventoryResponseDTO> returnBook(Long id);
 
     List<BookResponseDTO> findByNameOrAuthor(String query);
+
+
 }

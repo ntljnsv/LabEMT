@@ -3,6 +3,7 @@ package mk.finki.ukim.lab.service.application.impl;
 import mk.finki.ukim.lab.dto.BookInventoryResponseDTO;
 import mk.finki.ukim.lab.dto.BookRequestDTO;
 import mk.finki.ukim.lab.dto.BookResponseDTO;
+import mk.finki.ukim.lab.dto.NumBooksByAuthorResponseDTO;
 import mk.finki.ukim.lab.service.application.BookApplicationService;
 import mk.finki.ukim.lab.service.domain.BookInventoryService;
 import mk.finki.ukim.lab.service.domain.BookService;
@@ -72,5 +73,6 @@ public class BookApplicationServiceImpl implements BookApplicationService {
         return bookService.findByNameOrAuthor(query)
                 .stream().map(BookResponseDTO::fromEntity).toList();
     }
+
 
 }

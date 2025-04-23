@@ -1,8 +1,12 @@
 package mk.finki.ukim.lab.service.domain.impl;
 
 import mk.finki.ukim.lab.model.domain.Country;
+import mk.finki.ukim.lab.model.exceptions.AuthorNotFoundException;
 import mk.finki.ukim.lab.model.exceptions.CountryNotFoundException;
+import mk.finki.ukim.lab.model.views.NumAuthorsByCountry;
+import mk.finki.ukim.lab.model.views.NumBooksByAuthor;
 import mk.finki.ukim.lab.repository.CountryRepository;
+import mk.finki.ukim.lab.repository.NumAuthorsByCountryRepository;
 import mk.finki.ukim.lab.service.domain.CountryService;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +17,11 @@ import java.util.Optional;
 public class CountryServiceImpl implements CountryService {
 
     private final CountryRepository countryRepository;
+    private final NumAuthorsByCountryRepository numAuthorsByCountryRepository;
 
-    public CountryServiceImpl(CountryRepository countryRepository) {
+    public CountryServiceImpl(CountryRepository countryRepository, NumAuthorsByCountryRepository numAuthorsByCountryRepository) {
         this.countryRepository = countryRepository;
+        this.numAuthorsByCountryRepository = numAuthorsByCountryRepository;
     }
 
     @Override
@@ -59,5 +65,23 @@ public class CountryServiceImpl implements CountryService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void refreshNumAuthorsByCountryView() {
+        numAuthorsByCountryRepository.refreshMaterializedView();
+    }
+
+
+    @Override
+    public Optional<NumAuthorsByCountry> numAuthorsByCountry(Long id) {
+
+        Optional<NumAuthorsByCountry> numAuthorsByCountry = numAuthorsByCountryRepository.findByCountryId(id);
+
+        if(numAuthorsByCountry.isEmpty()) {
+            throw new CountryNotFoundException(id);
+        }
+
+        return numAuthorsByCountry;
     }
 }

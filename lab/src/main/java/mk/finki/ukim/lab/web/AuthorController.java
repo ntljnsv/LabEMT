@@ -2,11 +2,9 @@ package mk.finki.ukim.lab.web;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import mk.finki.ukim.lab.dto.AuthorRequestDTO;
-import mk.finki.ukim.lab.dto.AuthorResponseDTO;
+import mk.finki.ukim.lab.dto.*;
 import mk.finki.ukim.lab.model.exceptions.AuthorNotFoundException;
 import mk.finki.ukim.lab.model.exceptions.CountryNotFoundException;
-import mk.finki.ukim.lab.model.exceptions.NoAvailableCopiesException;
 import mk.finki.ukim.lab.service.application.AuthorApplicationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -77,6 +75,28 @@ public class AuthorController {
             return ResponseEntity.badRequest().build();
         }
 
+    }
+
+    @Operation(
+            summary = "View number of books by each author",
+            description = "Returns number of books written by each author.")
+    @GetMapping("/by-author")
+    public ResponseEntity<NumBooksByAuthorResponseDTO> numBooksByAuthor(@RequestParam Long id) {
+        try {
+            return authorService.numBooksByAuthor(id)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.badRequest().build());
+        } catch (AuthorNotFoundException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @Operation(
+            summary = "Get all author names and surnames",
+            description = "Retrieves a list of all author projections (name and surname).")
+    @GetMapping("/names")
+    public List<AuthorProjectionDTO> listAllAuthorNames() {
+        return authorService.listAllAuthorNames();
     }
 
 }

@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import mk.finki.ukim.lab.dto.BookInventoryResponseDTO;
 import mk.finki.ukim.lab.dto.BookRequestDTO;
 import mk.finki.ukim.lab.dto.BookResponseDTO;
+import mk.finki.ukim.lab.dto.NumBooksByAuthorResponseDTO;
 import mk.finki.ukim.lab.model.exceptions.AuthorNotFoundException;
 import mk.finki.ukim.lab.model.exceptions.BookNotFoundException;
 import mk.finki.ukim.lab.model.exceptions.NoAvailableCopiesException;
@@ -116,5 +117,6 @@ public class BookController {
     public List<BookResponseDTO> findByNameOrAuthor(@RequestParam String query) {
         return bookService.findByNameOrAuthor(query);
     }
+
 
 }

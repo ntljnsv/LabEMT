@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import mk.finki.ukim.lab.dto.CountryRequestDTO;
 import mk.finki.ukim.lab.dto.CountryResponseDTO;
+import mk.finki.ukim.lab.dto.NumAuthorsByCountryResponseDTO;
 import mk.finki.ukim.lab.model.exceptions.CountryNotFoundException;
 import mk.finki.ukim.lab.service.application.CountryApplicationService;
 import org.springframework.http.ResponseEntity;
@@ -70,6 +71,20 @@ public class CountryController {
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(countryService.deleteById(id));
+        } catch (CountryNotFoundException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @Operation(
+            summary = "View number of authors by country",
+            description = "Returns number of authors from given country.")
+    @GetMapping("/by-country")
+    public ResponseEntity<NumAuthorsByCountryResponseDTO> numAuthorsByCountry(@RequestParam Long id) {
+        try {
+            return countryService.numAuthorsByCountry(id)
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.badRequest().build());
         } catch (CountryNotFoundException e) {
             return ResponseEntity.badRequest().build();
         }

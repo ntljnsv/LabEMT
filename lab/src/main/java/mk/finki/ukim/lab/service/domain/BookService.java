@@ -20,4 +20,6 @@ public interface BookService {
     boolean hasAvailableCopies(Long id);
 
     List<Book> findByNameOrAuthor(String query);
+
+
 }

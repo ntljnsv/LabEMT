@@ -1,6 +1,7 @@
 package mk.finki.ukim.lab.service.domain;
 
 import mk.finki.ukim.lab.model.domain.Country;
+import mk.finki.ukim.lab.model.views.NumAuthorsByCountry;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,4 +17,9 @@ public interface CountryService {
     Optional<Country> update(Long id, String name, String continent);
 
     boolean deleteById(Long id);
+
+    void refreshNumAuthorsByCountryView();
+
+    Optional<NumAuthorsByCountry> numAuthorsByCountry(Long id);
+
 }

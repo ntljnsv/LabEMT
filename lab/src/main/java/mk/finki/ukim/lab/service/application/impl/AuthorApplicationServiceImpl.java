@@ -1,7 +1,6 @@
 package mk.finki.ukim.lab.service.application.impl;
 
-import mk.finki.ukim.lab.dto.AuthorRequestDTO;
-import mk.finki.ukim.lab.dto.AuthorResponseDTO;
+import mk.finki.ukim.lab.dto.*;
 import mk.finki.ukim.lab.service.application.AuthorApplicationService;
 import mk.finki.ukim.lab.service.domain.AuthorService;
 import org.springframework.stereotype.Service;
@@ -49,4 +48,18 @@ public class AuthorApplicationServiceImpl implements AuthorApplicationService {
     public boolean deleteById(Long id) {
         return authorService.deleteById(id);
     }
+
+
+    @Override
+    public List<AuthorProjectionDTO> listAllAuthorNames() {
+
+        return authorService.listAllAuthorNames()
+                .stream().map(AuthorProjectionDTO::fromEntity).toList();
+    }
+
+    @Override
+    public Optional<NumBooksByAuthorResponseDTO> numBooksByAuthor(Long id) {
+        return authorService.numBooksByAuthor(id).map(NumBooksByAuthorResponseDTO::fromEntity);
+    }
+
 }

@@ -4,7 +4,9 @@ import mk.finki.ukim.lab.model.domain.Book;
 import mk.finki.ukim.lab.model.enums.Category;
 import mk.finki.ukim.lab.model.exceptions.AuthorNotFoundException;
 import mk.finki.ukim.lab.model.exceptions.BookNotFoundException;
+import mk.finki.ukim.lab.model.views.NumBooksByAuthor;
 import mk.finki.ukim.lab.repository.BookRepository;
+import mk.finki.ukim.lab.repository.NumBooksByAuthorRepository;
 import mk.finki.ukim.lab.service.domain.AuthorService;
 import mk.finki.ukim.lab.service.domain.BookInventoryService;
 import mk.finki.ukim.lab.service.domain.BookService;
@@ -19,11 +21,19 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final AuthorService authorService;
     private final BookInventoryService bookInventoryService;
+    private final NumBooksByAuthorRepository numBooksByAuthorRepository;
 
-    public BookServiceImpl(BookRepository bookRepository, AuthorService authorService, BookInventoryService bookInventoryService) {
+    public BookServiceImpl(
+            BookRepository bookRepository,
+            AuthorService authorService,
+            BookInventoryService bookInventoryService,
+            NumBooksByAuthorRepository numBooksByAuthorRepository
+    ) {
+
         this.bookRepository = bookRepository;
         this.authorService = authorService;
         this.bookInventoryService = bookInventoryService;
+        this.numBooksByAuthorRepository = numBooksByAuthorRepository;
     }
 
     @Override
@@ -93,5 +103,6 @@ public class BookServiceImpl implements BookService {
     public List<Book> findByNameOrAuthor(String query) {
         return bookRepository.findByNameContainingOrAuthor_NameOrAuthor_Surname(query, query, query);
     }
+
 
 }

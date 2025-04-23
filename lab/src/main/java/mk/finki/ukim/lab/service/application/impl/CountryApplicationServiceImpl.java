@@ -2,6 +2,7 @@ package mk.finki.ukim.lab.service.application.impl;
 
 import mk.finki.ukim.lab.dto.CountryRequestDTO;
 import mk.finki.ukim.lab.dto.CountryResponseDTO;
+import mk.finki.ukim.lab.dto.NumAuthorsByCountryResponseDTO;
 import mk.finki.ukim.lab.service.application.CountryApplicationService;
 import mk.finki.ukim.lab.service.domain.CountryService;
 import org.springframework.stereotype.Service;
@@ -48,4 +49,10 @@ public class CountryApplicationServiceImpl implements CountryApplicationService 
     public boolean deleteById(Long id) {
         return countryService.deleteById(id);
     }
+
+    @Override
+    public Optional<NumAuthorsByCountryResponseDTO> numAuthorsByCountry(Long id) {
+        return countryService.numAuthorsByCountry(id).map(NumAuthorsByCountryResponseDTO::fromEntity);
+    }
+
 }
