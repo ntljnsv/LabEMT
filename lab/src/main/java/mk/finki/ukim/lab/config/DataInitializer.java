@@ -5,9 +5,11 @@ import mk.finki.ukim.lab.model.domain.*;
 import mk.finki.ukim.lab.model.enums.Category;
 import mk.finki.ukim.lab.model.enums.Role;
 import mk.finki.ukim.lab.repository.*;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+@Profile("test")
 @Component
 public class DataInitializer {
 

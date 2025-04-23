@@ -39,7 +39,7 @@ public class User implements UserDetails {
 
     @ManyToMany
     @JoinTable(
-            name = "user_wishlist",
+            name = "user_wishlists",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )

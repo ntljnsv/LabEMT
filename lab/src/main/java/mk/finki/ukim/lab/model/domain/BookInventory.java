@@ -9,6 +9,7 @@ import java.util.Objects;
 @Data
 @Entity
 @NoArgsConstructor
+@Table(name = "book_inventory")
 public class BookInventory {
 
     @Id
