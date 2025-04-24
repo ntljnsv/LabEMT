@@ -9,3 +9,8 @@ create materialized view num_authors_by_country as
     from countries c
     left join authors a on a.country_id = c.id
     group by c.id;
+
+create materialized view damaged_books as
+    select b.id, b.name, b.book_condition
+    from books b
+    where b.book_condition like 'DAMAGED'

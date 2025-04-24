@@ -2,6 +2,7 @@ package mk.finki.ukim.lab.config;
 
 import jakarta.annotation.PostConstruct;
 import mk.finki.ukim.lab.model.domain.*;
+import mk.finki.ukim.lab.model.enums.BookCondition;
 import mk.finki.ukim.lab.model.enums.Category;
 import mk.finki.ukim.lab.model.enums.Role;
 import mk.finki.ukim.lab.repository.*;
@@ -49,9 +50,9 @@ public class DataInitializer {
         authorRepository.save(author1);
         authorRepository.save(author2);
 
-        Book book1 = bookRepository.save(new Book("Book1", Category.BIOGRAPHY, author1));
-        Book book2 = bookRepository.save(new Book("Book2", Category.THRILLER, author2));
-        Book book3 = bookRepository.save(new Book("Book3", Category.HISTORY, author1));
+        Book book1 = bookRepository.save(new Book("Book1", Category.BIOGRAPHY, author1, BookCondition.NEW));
+        Book book2 = bookRepository.save(new Book("Book2", Category.THRILLER, author2, BookCondition.DAMAGED));
+        Book book3 = bookRepository.save(new Book("Book3", Category.HISTORY, author1, BookCondition.DAMAGED));
 
         bookInventoryRepository.save(new BookInventory(book1, 2));
         bookInventoryRepository.save(new BookInventory(book2, 3));

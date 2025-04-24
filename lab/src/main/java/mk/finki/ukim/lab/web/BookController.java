@@ -2,10 +2,7 @@ package mk.finki.ukim.lab.web;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import mk.finki.ukim.lab.dto.BookInventoryResponseDTO;
-import mk.finki.ukim.lab.dto.BookRequestDTO;
-import mk.finki.ukim.lab.dto.BookResponseDTO;
-import mk.finki.ukim.lab.dto.NumBooksByAuthorResponseDTO;
+import mk.finki.ukim.lab.dto.*;
 import mk.finki.ukim.lab.model.exceptions.AuthorNotFoundException;
 import mk.finki.ukim.lab.model.exceptions.BookNotFoundException;
 import mk.finki.ukim.lab.model.exceptions.NoAvailableCopiesException;
@@ -118,5 +115,13 @@ public class BookController {
         return bookService.findByNameOrAuthor(query);
     }
 
+    @Operation(
+            summary = "Get all damaged books",
+            description = "Retrieves a list of all damaged book ids and their names"
+    )
+    @GetMapping("/damaged-books")
+    public List<DamagedBookResponseDTO> findAllDamagedBooks() {
+        return bookService.listAllDamagedBooks();
+    }
 
 }

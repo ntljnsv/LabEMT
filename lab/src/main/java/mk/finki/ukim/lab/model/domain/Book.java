@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mk.finki.ukim.lab.model.enums.BookCondition;
 import mk.finki.ukim.lab.model.enums.Category;
 
 import java.util.HashSet;
@@ -31,10 +32,20 @@ public class Book {
     @ManyToMany(mappedBy = "wishlist")
     private Set<User> usersWhoWishlisted = new HashSet<>();
 
+    @Enumerated(EnumType.STRING)
+    private BookCondition bookCondition;
+
     public Book(String name, Category category, Author author) {
         this.name = name;
         this.category = category;
         this.author = author;
+    }
+
+    public Book(String name, Category category, Author author, BookCondition bookCondition) {
+        this.name = name;
+        this.category = category;
+        this.author = author;
+        this.bookCondition = bookCondition;
     }
 
     @Override

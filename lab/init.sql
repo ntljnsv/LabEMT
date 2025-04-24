@@ -30,6 +30,7 @@ create table books (
     name varchar(255) not null ,
     category varchar(255) not null,
     author_id bigint not null,
+    book_condition varchar(255) not null,
 
     foreign key (author_id) references authors(id)
 );
