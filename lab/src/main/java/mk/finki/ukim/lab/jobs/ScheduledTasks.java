@@ -2,10 +2,12 @@ package mk.finki.ukim.lab.jobs;
 
 import mk.finki.ukim.lab.service.domain.AuthorService;
 import mk.finki.ukim.lab.service.domain.BookService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("dev")
 public class ScheduledTasks {
 
     private final AuthorService authorService;

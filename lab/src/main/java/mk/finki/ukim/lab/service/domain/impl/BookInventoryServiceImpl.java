@@ -21,7 +21,9 @@ public class BookInventoryServiceImpl implements BookInventoryService {
 
     @Override
     public Optional<BookInventory> create(Book book, int availableCopies) {
-        return Optional.of(bookInventoryRepository.save(new BookInventory(book, availableCopies)));
+        BookInventory bookInventory = new BookInventory(book, availableCopies);
+        book.setInventory(bookInventory);
+        return Optional.of(bookInventoryRepository.save(bookInventory));
     }
 
     @Override

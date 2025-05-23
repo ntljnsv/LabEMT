@@ -57,9 +57,11 @@ public class BookServiceImpl implements BookService {
             authorService.findById(authorId).orElseThrow(() -> new AuthorNotFoundException(authorId))
         );
 
+        book = bookRepository.save(book);
+
         bookInventoryService.create(book, availableCopies);
 
-        return Optional.of(bookRepository.save(book));
+        return Optional.of(book);
     }
 
     @Override

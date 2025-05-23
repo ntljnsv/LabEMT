@@ -3,6 +3,7 @@ package mk.finki.ukim.lab.web;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import mk.finki.ukim.lab.dto.*;
+import mk.finki.ukim.lab.model.enums.Category;
 import mk.finki.ukim.lab.model.exceptions.AuthorNotFoundException;
 import mk.finki.ukim.lab.model.exceptions.BookNotFoundException;
 import mk.finki.ukim.lab.model.exceptions.NoAvailableCopiesException;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 //http://localhost:8080/swagger-ui/index.html#/
@@ -122,6 +124,15 @@ public class BookController {
     @GetMapping("/damaged-books")
     public List<DamagedBookResponseDTO> findAllDamagedBooks() {
         return bookService.listAllDamagedBooks();
+    }
+
+    @Operation(
+            summary = "Get all book categories",
+            description = "Retrieves a list of possible book categories"
+    )
+    @GetMapping("/categories")
+    public List<Category> findAllCategories() {
+        return Arrays.stream(Category.values()).toList();
     }
 
 }
